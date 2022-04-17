@@ -1,0 +1,65 @@
+
+# Create Database store
+CREATE database store;
+
+# Create Table countries
+use store;
+create table countries(
+code_countries int primary key,
+name_countries varchar(20) not null,
+continent_name varchar(20) unique
+);
+
+# Create Table Users
+use store;
+create table users(
+id int primary key,
+full_name varchar(20) not null,
+email varchar(20) unique,
+gender varchar(1) check(gender in('F' , 'M')),
+data_of_birth varchar(20),
+created_at datetime,
+country_code int,
+foreign key (country_code) references countries(code_countries)
+);
+
+# Create Table Orders
+use store;
+create table orders(
+id int primary key,
+user_id int,
+foreign key (user_id) references users(id),
+status varchar(6) check(status in('start' , 'finish')),
+created_at datetime
+);
+
+# Create Table products
+use store;
+create table products(
+id int primary key,
+name varchar(10) not null,
+price int default 0,
+status varchar(10) check(status in('valid' , 'expired')),
+created_at datetime 
+);
+
+# Create Table order_products
+use store;
+create table order_products(
+order_id int,
+product_id int,
+quantity int default 0,
+foreign key (order_id) references orders(id),
+foreign key (product_id) references products(id)
+);
+
+
+#DML 
+insert into countries values ('123','SA','Asia');
+insert into users values ('1','Afnan Mohammed','afnan@gmail.com','F','10-10-2010','2021-4-17','123');
+insert into orders values ('0','1','start','2022-4-17');
+insert into products values ('1','product_1','100','valid','2022-4-17');
+insert into products values ('2','product_2','200','valid','2022-4-17');
+insert into order_products values ('0','1','3');
+update countries set name_countries='Saudi Arabia' where code_countries='123';
+delete from products where id='2';
